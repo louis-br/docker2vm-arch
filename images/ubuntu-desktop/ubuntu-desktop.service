@@ -1,0 +1,30 @@
+[Unit]
+Description=Ubuntu desktop
+Documentation=man:podman-generate-systemd(1)
+RequiresMountsFor=%t/containers
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Restart=no
+TimeoutStopSec=70
+StandardOutput=journal
+StandardError=journal
+ExecStartPre=-/bin/rm -f %t/%n.ctr-id
+ExecStart=/usr/bin/podman run \
+	--cidfile=%t/%n.ctr-id \
+	--cgroups=no-conmon \
+	--sdnotify=conmon \
+	--rm \
+	--detach \
+	--tty \
+	--volume /tmp/.X11-unix:/tmp/.X11-unix \
+	--volume /root/.Xauthority:/home/user/.Xauthority \
+	--user root \
+	ubuntu-desktop /sbin/init
+ExecStop=-/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
+ExecStopPost=-/usr/bin/podman rm -f --ignore --cidfile=%t/%n.ctr-id
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=default.target

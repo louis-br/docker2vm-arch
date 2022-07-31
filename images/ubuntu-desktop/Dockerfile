@@ -1,0 +1,20 @@
+FROM ubuntu:latest
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get upgrade --yes
+RUN yes | unminimize
+RUN apt-get install --yes systemd
+RUN apt-get install --yes xfce4 xfce4-goodies xfce4-terminal
+RUN apt-get install --yes firefox
+RUN apt-get install --yes build-essential git
+RUN apt-get install --yes sudo nano bash
+RUN apt-get install --yes curl dnsutils strace netcat socat htop
+RUN apt-get install --yes xterm
+
+RUN groupadd user && \
+    useradd -m -g user -s /bin/bash --password user user && \
+    usermod -g user user && \
+    echo "user:user" | chpasswd && \
+    adduser user sudo
+USER user
+WORKDIR /home/user
+#Cannot make/remove an entry for the specified session

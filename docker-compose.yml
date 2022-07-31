@@ -1,5 +1,12 @@
 version: "3.9"
 services:
-  arch:
+  docker2vm-arch:
+    container_name: ${DISTRO}-export
+    image: docker2vm-arch:latest
+  base:
     build:
       context: ./distros/docker2vm-arch
+    privileged: true
+    tmpfs: /tmp/containers
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
