@@ -1,0 +1,20 @@
+# /etc/systemd/user/podman-compose@.service
+
+[Unit]
+Description=media-config rootless pod (podman-compose)
+
+[Service]
+Type=simple
+Environment=COMPOSE_PROJECT_DIR=/media-config
+Environment=COMPOSE_FILE=compose.yml
+Environment=COMPOSE_PROJECT_NAME=media-config
+Environment=COMPOSE_PATH_SEPARATOR=:
+ExecStartPre=-/usr/bin/podman-compose up --no-start
+ExecStartPre=/usr/bin/podman pod start pod_media-config
+ExecStart=/usr/bin/podman-compose wait
+ExecStop=/usr/bin/podman pod stop pod_media-config
+
+[Install]
+WantedBy=default.target
+
+#EnvironmentFile=%h/.config/containers/compose/projects/media-config.env

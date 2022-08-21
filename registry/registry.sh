@@ -1,7 +1,7 @@
 #!/bin/sh
-docker run \
+podman run \
+  --rm \
   -p 5000:5000 \
-  --restart=always \
   --name registry \
   -v $PWD/data:/var/lib/registry \
   registry:2

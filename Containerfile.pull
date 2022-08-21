@@ -1,0 +1,7 @@
+FROM docker2vm-base
+RUN podman pull --tls-verify=false localhost:5000/update-config:latest
+RUN podman pull --tls-verify=false localhost:5000/ssh-server:latest
+RUN podman pull --tls-verify=false localhost:5000/arch-xserver:latest
+RUN podman pull --tls-verify=false localhost:5000/ubuntu-desktop:latest
+RUN podman system prune --force
+RUN podman image ls --all

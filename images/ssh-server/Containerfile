@@ -1,0 +1,6 @@
+FROM docker.io/alpine:latest
+RUN apk add --no-cache dropbear util-linux
+RUN mkdir /etc/dropbear
+RUN echo "root:root" | chpasswd
+ENTRYPOINT ["dropbear", "-F", "-E", "-R"]
+CMD ["-G", "root", "-a", "-c", "nsenter -t 1 --all sh -c 'exec ${SSH_ORIGINAL_COMMAND:-sh}'"]

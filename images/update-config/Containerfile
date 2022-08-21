@@ -1,0 +1,8 @@
+FROM docker.io/alpine:latest
+RUN apk add --no-cache findutils rsync
+COPY systemd-units /systemd-units
+COPY update.sh /update.sh
+RUN chmod +x update.sh
+COPY copy.sh /copy.sh
+RUN chmod +x copy.sh
+ENTRYPOINT ["/copy.sh"]
